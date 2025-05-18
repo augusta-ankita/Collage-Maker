@@ -1,0 +1,386 @@
+ * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #222;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    background: #121212;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  main {
+    flex-grow: 1;
+    display: flex;
+    padding: 12px;
+    column-gap: 12px;
+    background: #202020;
+  }
+
+  /* Sidebar for controls */
+  #controls {
+    width: 360px;
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 0 12px rgba(255 255 255 / 0.1);
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+  }
+  #controls h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-align: center;
+    letter-spacing: 1.5px;
+  }
+  label {
+    margin-top: 12px;
+    font-weight: 500;
+    color: #ccc;
+    display: block;
+    margin-bottom: 6px;
+  }
+  input[type="file"] {
+    width: 100%;
+  }
+  input[type="color"],
+  input[type="range"],
+  button {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 6px;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  input[type="color"] {
+    padding: 4px;
+    cursor: pointer;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    height: 8px;
+    background: #444;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #eee;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  button.primary {
+    background: #3399ff;
+    color: white;
+    margin-top: 18px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgb(51 153 255 / 0.6);
+  }
+  button.primary:hover {
+    background: #1a75ff;
+  }
+  button:disabled {
+    background: #555 !important;
+    cursor: not-allowed;
+  }
+  #images-list {
+    margin-top: 10px;
+    overflow-y: auto;
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #images-list .img-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.25s ease;
+  }
+  #images-list .img-thumb.selected {
+    border-color: #3399ff;
+  }
+  #control-btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  #control-btn-group button {
+    flex-grow: 1;
+    font-size: 14px;
+  }
+
+  /* Collage area */
+  #collage-wrapper {
+    flex-grow: 1;
+    background: #111;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #collage {
+    position: relative;
+    width: 90vw;
+    height: 90vh;
+    max-width: 1200px;
+    max-height: 800px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 0 18px rgba(0,0,0,0.6);
+  }
+
+  /* Image item in collage */
+  .collage-image {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    cursor: move;
+    user-select: none;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+    background: #222;
+    overflow: visible;
+    transition: border-color 0.2s ease;
+  }
+  .collage-image.selected {
+    border-color: #3399ff;
+    box-shadow: 0 0 12px #3399ff;
+    z-index: 9999;
+  }
+  .collage-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    pointer-events: none;
+    user-select: none;
+    object-fit: cover;
+  }
+
+  /* resize handle (bottom-right) */
+  .resize-handle {
+    width: 20px;
+    height: 20px;
+    background: #3399ff;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -10px;
+    right: -10px;
+    cursor: se-resize;
+    box-shadow: 0 0 8px #3399ffaa;
+  }
+  /* rotate handle (top-center) */
+  .rotate-handle {
+    width: 20px;
+    height: 20px;
+    background: #ff9933;
+    border-radius: 50%;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    margin-left: -10px;
+    cursor: grab;
+    box-shadow: 0 0 8px #ff9933aa;
+  }
+
+  /* Overlay for instructions */
+  #instructions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111a;
+    color: #ddd;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    text-align: center;
+    font-style: italic;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Scrollbar for image list */
+  #images-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  #images-list::-webkit-scrollbar-track {
+    background: #222;
+  }
+  #images-list::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+  }
+
+  /* Suggested layouts */
+  #suggested-layouts {
+    margin-top: 18px;
+  }
+  #suggested-layouts h3 {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #ddd;
+    text-align: center;
+  }
+  #suggested-layouts .layout-thumb {
+    width: 90px;
+    height: 70px;
+    background: #333;
+    border-radius: 10px;
+    margin: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 8px #000;
+    display: inline-block;
+    position: relative;
+    border: 2px solid transparent;
+  }
+  #suggested-layouts .layout-thumb:hover,
+  #suggested-layouts .layout-thumb.selected {
+    border-color: #3399ff;
+    box-shadow: 0 0 12px #3399ff;
+  }
+  #suggested-layouts .layout-thumb > div {
+    background: #555;
+    margin: 4px 4px;
+    border-radius: 3px;
+    position: absolute;
+  }
+
+  /* Crop modal */
+  #crop-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+  }
+  #crop-modal.active {
+    display: flex;
+  }
+  #crop-container {
+    position: relative;
+    background: #111;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 0 20px #3399ffaa;
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+  #crop-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: #222;
+    border-radius: 10px;
+    max-width: 800px;
+    max-height: 600px;
+    cursor: crosshair;
+  }
+  #crop-image-wrapper img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+    pointer-events: none;
+  }
+  #crop-rect {
+    position: absolute;
+    border: 2px dashed #3399ff;
+    background: rgba(51,153,255,0.2);
+    cursor: move;
+    box-sizing: border-box;
+    outline: none;
+  }
+  #crop-rect .handle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #3399ff;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #3399ff;
+  }
+  /* 8 handles */
+  #crop-rect .handle.nw { top: -7px; left: -7px; cursor: nwse-resize; }
+  #crop-rect .handle.n { top: -7px; left: 50%; margin-left: -7px; cursor: ns-resize; }
+  #crop-rect .handle.ne { top: -7px; right: -7px; cursor: nesw-resize; }
+  #crop-rect .handle.e { top: 50%; right: -7px; margin-top: -7px; cursor: ew-resize; }
+  #crop-rect .handle.se { bottom: -7px; right: -7px; cursor: nwse-resize; }
+  #crop-rect .handle.s { bottom: -7px; left: 50%; margin-left: -7px; cursor: ns-resize; }
+  #crop-rect .handle.sw { bottom: -7px; left: -7px; cursor: nesw-resize; }
+  #crop-rect .handle.w { top: 50%; left: -7px; margin-top: -7px; cursor: ew-resize; }
+
+  #crop-buttons {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  #crop-buttons button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #crop-buttons button.save {
+    background: #3399ff;
+    color: white;
+    box-shadow: 0 4px 10px rgb(51 153 255 / 0.6);
+    transition: background-color 0.25s ease;
+  }
+  #crop-buttons button.save:hover {
+    background: #1a75ff;
+  }
+  #crop-buttons button.cancel {
+    background: #cc4444;
+    color: white;
+  }
+
+
+  /* Color correction sliders container */
+  #color-correction {
+    margin-top: 12px;
+  }
+  #color-correction label {
+    font-weight: 600;
+    margin-top: 8px;
+    color: #a5c6ff;
+  }
+  #color-correction input[type="range"] {
+    margin-top: 4px;
+  }

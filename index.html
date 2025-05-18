@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Advanced Collage Maker with Fancy Layouts, Crop, Remove, and Color Correction</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+  <h1>ADVANCED COLLAGE-MAKER</h1>
+</header>
+<main>
+  <section id="controls">
+    <h2>Controls</h2>
+    <label for="image-upload">Upload Images</label>
+    <input type="file" id="image-upload" accept="image/*" multiple />
+
+    <label for="background-color">Background Color</label>
+    <input type="color" id="background-color" value="#ffffff" />
+
+    <label for="opacity-range">Selected Image Opacity</label>
+    <input type="range" id="opacity-range" min="0.1" max="1" step="0.05" value="1" />
+
+    <label for="zindex-range">Selected Image Z-Index</label>
+    <input type="range" id="zindex-range" min="1" max="100" step="1" value="10" />
+
+    <div id="control-btn-group">
+      <button id="bring-front-btn" title="Bring selected image to front">Bring Front</button>
+      <button id="send-back-btn" title="Send selected image to back">Send Back</button>
+    </div>
+
+    <div id="control-btn-group">
+      <button class="primary" id="crop-btn" disabled title="Crop the selected image">Crop</button>
+      <button class="primary" id="remove-btn" disabled title="Remove the selected image">Remove</button>
+    </div>
+
+    <div id="color-correction">
+      <label for="brightness-range">Brightness</label>
+      <input type="range" id="brightness-range" min="50" max="150" step="1" value="100" disabled />
+
+      <label for="contrast-range">Contrast</label>
+      <input type="range" id="contrast-range" min="50" max="150" step="1" value="100" disabled />
+
+      <label for="saturate-range">Saturation</label>
+      <input type="range" id="saturate-range" min="0" max="200" step="1" value="100" disabled />
+
+      <label for="hue-range">Hue Rotation</label>
+      <input type="range" id="hue-range" min="0" max="360" step="1" value="0" disabled />
+    </div>
+
+    <button class="primary" id="export-btn">Export Collage as PNG</button>
+    <button id="clear-btn" style="margin-top: 12px; background: #cc4444; color: white;">Clear All</button>
+
+    <div id="images-list"></div>
+
+    <div id="suggested-layouts">
+      <h3>Suggested Layouts</h3>
+      <!-- Layout thumbnails generated dynamically -->
+    </div>
+  </section>
+
+  <section id="collage-wrapper" aria-label="Collage canvas area">
+    <div id="collage"></div>
+  </section>
+</main>
+
+<div id="instructions">Drag images to move. Use handles to resize and rotate. Select images by clicking. Adjust opacity, z-index, and color corrections here.</div>
+
+<!-- Crop model -->
+<div id="crop-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Crop Image Modal">
+  <div id="crop-container">
+    <div id="crop-image-wrapper">
+      <img id="crop-image" alt="Image to crop" />
+      <div id="crop-rect" tabindex="0" aria-label="Crop area">
+        <div class="handle nw" data-handle="nw"></div>
+        <div class="handle n" data-handle="n"></div>
+        <div class="handle ne" data-handle="ne"></div>
+        <div class="handle e" data-handle="e"></div>
+        <div class="handle se" data-handle="se"></div>
+        <div class="handle s" data-handle="s"></div>
+        <div class="handle sw" data-handle="sw"></div>
+        <div class="handle w" data-handle="w"></div>
+      </div>
+    </div>
+    <div id="crop-buttons">
+      <button class="save" id="crop-save-btn">Save Crop</button>
+      <button class="cancel" id="crop-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
